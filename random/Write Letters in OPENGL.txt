@@ -1,0 +1,270 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include<GL/glew.h>
+#include<GL/freeglut.h>
+
+//MERHABA HOCAM, ÖNCE ÇEVÝRMEK ÝSTEDÝÐÝNÝZ EKSENÝ SEÇÝN SONRA ÇEVÝRMEK ÝSTEDÝÐÝNÝZ HARFÝ. ANCAK BENÝM ÝSMÝMÝN ÝÇÝNDE "Z" HARFÝ BULUNDUÐU ÝÇÝN "Z" EKSENÝ 
+// ETRAFINDA ÇEVÝRMEK ÝÇÝN "F" HARFÝNÝ KULLANIN. ÖRNEK OLARAK ÖNCE "F" SONRA "M" HARFÝ BASARSANIZ "M" HARFLERÝ "Z" EKSENÝ ETRAFINDA DÖNMEYE BAÞLAR.
+void redraw(void);
+char input = ' ';
+char rotate = ' ';
+unsigned char key = ' ';
+float x_ = 0.0f, y_ = 0.0f, f = 0.0f;
+
+
+
+
+void keyboardName(unsigned char key, int x, int y)
+{
+	rotate = ' ';
+
+	if (key == 30)
+		exit(0);
+
+	switch (key) {
+	case 'm':
+	case 'a':
+	case 'z':
+	case 'l':
+	case 'u':
+	case 'M':
+	case 'A':
+	case 'Z':
+	case 'L':
+	case 'U':
+		input = key;
+		break;
+	case 'y':
+		x_ = 1.0f; y_ = 0.0f; f=0.0f;
+		break;
+	case 'x':
+		x_ = 0.0f; y_ = 1.0f; f = 0.0f;
+		break;
+	case 'f':
+		x_ = 0.0f; y_ = 0.0f; f = 1.0f;
+		break;
+	}
+	glutPostRedisplay();
+
+}
+
+struct Vector3
+{
+	Vector3(float x, float y, float z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+	float x;
+	float y;
+	float z;
+};
+
+void drawCube(Vector3 origin, Vector3 dimensions)
+{
+	glBegin(GL_QUADS);
+
+	glColor3f(0.0f, 0.5f, 0.0f); // Set The Color To Green
+	glVertex3f(origin.x + dimensions.x, origin.y + dimensions.y, origin.z + dimensions.z); // Top Right Of The Quad (Front)
+	glVertex3f(origin.x - dimensions.x, origin.y + dimensions.y, origin.z + dimensions.z); // Top Left Of The Quad (Front)
+	glVertex3f(origin.x - dimensions.x, origin.y - dimensions.y, origin.z + dimensions.z); // Bottom Left Of The Quad (Front)
+	glVertex3f(origin.x + dimensions.x, origin.y - dimensions.y, origin.z + dimensions.z); // Bottom Right Of The Quad (Front)
+
+	glColor3f(0.0f, 0.0f, 0.5f); // Set The Color To Blue
+	glVertex3f(origin.x - dimensions.x, origin.y + dimensions.y, origin.z - dimensions.z); // Top Right Of The Quad (Back)
+	glVertex3f(origin.x + dimensions.x, origin.y + dimensions.y, origin.z - dimensions.z);  // Top Left Of The Quad (Back)
+	glVertex3f(origin.x + dimensions.x, origin.y - dimensions.y, origin.z - dimensions.z); // Bottom Left Of The Quad (Back)
+	glVertex3f(origin.x - dimensions.x, origin.y - dimensions.y, origin.z - dimensions.z); // Bottom Right Of The Quad (Back")
+
+	glColor3f(0.5f, 0.5f, 0.5f); // Set The Color White
+	glVertex3f(origin.x - dimensions.x, origin.y - dimensions.y, origin.z + dimensions.z);  // Bottom Right Of The Quad (Left)
+	glVertex3f(origin.x - dimensions.x, origin.y + dimensions.y, origin.z + dimensions.z);  // Bottom Left Of The Quad (Left)
+	glVertex3f(origin.x - dimensions.x, origin.y + dimensions.y, origin.z - dimensions.z);  // Top Right Of The Quad (Left)
+	glVertex3f(origin.x - dimensions.x, origin.y - dimensions.y, origin.z - dimensions.z);  // Top Left Of The Quad (Left)
+
+
+	glColor3f(0.5f, 0.0f, 0.0f); // Set The Color To Red
+	glVertex3f(origin.x + dimensions.x, origin.y + dimensions.y, origin.z - dimensions.z); ; // Top Right Of The Quad (Right)
+	glVertex3f(origin.x + dimensions.x, origin.y + dimensions.y, origin.z + dimensions.z); // Top Left Of The Quad (Right)
+	glVertex3f(origin.x + dimensions.x, origin.y - dimensions.y, origin.z + dimensions.z); // Bottom Left Of The Quad (Right)
+	glVertex3f(origin.x + dimensions.x, origin.y - dimensions.y, origin.z - dimensions.z); // Bottom Right Of The Quad (Right)
+
+	glColor3f(0.2f, 0.0f, 0.5f); // Set The Color To Violet
+	glVertex3f(origin.x + dimensions.x, origin.y + dimensions.y, origin.z - dimensions.z); // Top Right Of The Quad (Top)
+	glVertex3f(origin.x - dimensions.x, origin.y + dimensions.y, origin.z - dimensions.z); // Top Left Of The Quad (Top)
+	glVertex3f(origin.x - dimensions.x, origin.y + dimensions.y, origin.z + dimensions.z); // Bottom Left Of The Quad (Top)
+	glVertex3f(origin.x + dimensions.x, origin.y + dimensions.y, origin.z + dimensions.z); // Bottom Right Of The Quad (Top)
+
+	glColor3f(0.5f, 0.5f, 0.0f); // Set The Color To Yellow
+	glVertex3f(origin.x + dimensions.x, origin.y - dimensions.y, origin.z + dimensions.z); // Top Right Of The Quad (Bottom)
+	glVertex3f(origin.x - dimensions.x, origin.y - dimensions.y, origin.z + dimensions.z); // Top Left Of The Quad (Bottom)
+	glVertex3f(origin.x - dimensions.x, origin.y - dimensions.y, origin.z - dimensions.z); // Bottom Left Of The Quad (Bottom)
+	glVertex3f(origin.x + dimensions.x, origin.y - dimensions.y, origin.z - dimensions.z); // Bottom Right Of The Quad (Bottom)
+
+	glEnd();
+	glutSwapBuffers();
+	glFlush();
+}
+void M_Letter()
+{
+	
+	drawCube(Vector3(49, 132, 0), Vector3(30, 3, 3)); // sol ayak
+	glRotatef(11, 0.0, 0.0, 1.0);
+	drawCube(Vector3(72, 110, 0), Vector3(30, 3, 3)); // sol eðri	
+
+	glRotatef(-11, 0.0, 0.0, 1.0);
+
+	drawCube(Vector3(49, 98, 0), Vector3(30, 3, 3)); // sað ayak
+	glRotated(-11, 0.0, 0.0, 1.0);
+	drawCube(Vector3(28, 116, 0), Vector3(30, 3, 3)); // sað eðri
+
+	glRotated(11, 0.0, 0.0, 1.0);
+
+}
+void A_Letter()
+{
+	drawCube(Vector3(50, 85, 0), Vector3(30, 3, 3)); // sol ayak
+	drawCube(Vector3(43, 73, 0), Vector3(5, 10, 3)); // orta çizgi
+	drawCube(Vector3(75, 75, 0), Vector3(5, 12, 3)); // üst kýsým
+	drawCube(Vector3(50, 60, 0), Vector3(30, 3, 3)); // sað ayak
+}
+void Z_Letter()
+{
+	drawCube(Vector3(75, 36, 0), Vector3(5, 13, 3));
+	glRotatef(62, 0.0, 0.0, 1.0);
+	drawCube(Vector3(57, -28, 0), Vector3(4, 23, 3));
+	glRotatef(-62, 0.0, 0.0, 1.0);
+	drawCube(Vector3(27, 38, 0), Vector3(5, 13, 3));
+}
+void L_Letter()
+{
+	drawCube(Vector3(51, 10, 0), Vector3(29, 3, 3)); // sol ayak
+	drawCube(Vector3(27, 0, 0), Vector3(5, 13, 3)); // sol ayak
+}
+void U_Letter()
+{
+	drawCube(Vector3(51, -25, 0), Vector3(29, 3, 3)); // sol ayak
+	drawCube(Vector3(27, -35, 0), Vector3(5, 13, 3)); // sol ayak
+	drawCube(Vector3(51, -43, 0), Vector3(29, 3, 3)); // sol ayak
+}
+
+void M_Letter2()
+{
+
+	drawCube(Vector3(49, -65, 0), Vector3(30, 3, 3)); // sol ayak
+	glRotatef(11, 0.0, 0.0, 1.0);
+	drawCube(Vector3(35, -85, 0), Vector3(30, 3, 3)); // sol eðri	
+
+	glRotatef(-11, 0.0, 0.0, 1.0);
+
+	drawCube(Vector3(49, -99, 0), Vector3(30, 3, 3)); // sað ayak
+	glRotated(-11, 0.0, 0.0, 1.0);
+	drawCube(Vector3(68, -79, 0), Vector3(30, 3, 3)); // sað eðri
+
+	glRotated(11, 0.0, 0.0, 1.0);
+
+}
+
+// viewport
+int viewPort_X = 0;
+void ViewPortInit() {
+	glViewport(viewPort_X, 0, 300, 300);
+	viewPort_X += 160;
+
+}
+
+//redraw
+float rotationAngle = 0.0f;
+
+void reDraw() {
+	viewPort_X = 0;
+	rotationAngle += 1.5f;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glRotatef(90, 0.0, 0.0, 1.0);
+
+	ViewPortInit();
+	if (input == 'm' || input == 'M') {
+		glRotatef(rotationAngle, x_, y_, f);
+	}
+	M_Letter();
+	if (input == 'm' || input == 'M') {
+		glRotatef(-rotationAngle, x_, y_, f);
+	}
+	
+	ViewPortInit();
+	if (input == 'a' || input == 'A') {
+		glRotatef(rotationAngle, x_, y_, f);
+	}
+	A_Letter();
+	if (input == 'a' || input == 'A') {
+		glRotatef(-rotationAngle, x_, y_, f);
+	}
+
+	ViewPortInit();
+	if (input == 'Z' || input == 'z') {
+		glRotatef(rotationAngle, x_, y_, f);
+	}
+	Z_Letter();
+	if (input == 'Z' || input == 'z') {
+		glRotatef(-rotationAngle, x_, y_, f);
+	}
+
+	ViewPortInit();
+	if (input == 'l' || input == 'L') {
+		glRotatef(rotationAngle, x_, y_, f);
+	}
+	L_Letter();
+	if (input == 'l' || input == 'L') {
+		glRotatef(-rotationAngle, x_, y_, f);
+	}
+
+	ViewPortInit();
+	if (input == 'u' || input == 'U') {
+		glRotatef(rotationAngle, x_, y_, f);
+	}
+	U_Letter();
+	if (input == 'u' || input == 'U') {
+		glRotatef(-rotationAngle, x_, y_, f);
+	}
+
+	ViewPortInit();
+	if (input == 'm' || input == 'M') {
+		glRotatef(rotationAngle, x_, y_, f);
+	}
+	M_Letter2();
+	if (input == 'm' || input == 'M') {
+		glRotatef(-rotationAngle, x_, y_, f);
+	}
+	glRotatef(-90, 0.0, 0.0, 1.0);
+
+	glutSwapBuffers();
+}
+
+
+
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);
+	glutInitWindowSize(1000, 900);
+	glutInitWindowPosition(0, 0);
+	glutInitDisplayMode(GLUT_DEPTH);
+	glutCreateWindow("Cube");
+	
+	glOrtho(-250.0, 250.0, -250.0, 250.0, -250.0, 250.0);
+
+	glutDisplayFunc(reDraw);
+	glutKeyboardFunc(keyboardName);
+
+	glClearColor(0.1, 0.0, 0.1, 1.0);
+	glMatrixMode(GL_PROJECTION);
+
+	glMatrixMode(GL_MODELVIEW);
+	glutMainLoop();
+	return 0;
+}
+
+
+
